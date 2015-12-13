@@ -3,14 +3,14 @@ function c45103815.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--level
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_PZONE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCountLimit(1)
-	e1:SetTarget(c45103815.lvtg)
-	e1:SetOperation(c45103815.lvop)
-	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_PZONE)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCountLimit(1)
+	e2:SetTarget(c45103815.lvtg)
+	e2:SetOperation(c45103815.lvop)
+	c:RegisterEffect(e2)
 end
 function c45103815.filter(c)
 	return c:IsFaceup() and c:GetLevel()>0
