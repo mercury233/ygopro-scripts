@@ -2,12 +2,14 @@
 function c12615446.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,c12615446.matfilter,3,2,nil,nil,5)
+	c:EnableReviveLimit()
 	--Position+Negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(12615446,0))
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetHintTiming(0,0x1c0)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCategory(CATEGORY_POSITION+CATEGORY_DISABLE)
 	e1:SetCountLimit(1)
@@ -18,7 +20,7 @@ function c12615446.initial_effect(c)
 	--Attach
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(12615446,1))
-	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_BATTLE_DESTROYING)
 	e2:SetCountLimit(1)
 	e2:SetCondition(c12615446.xyzcon)

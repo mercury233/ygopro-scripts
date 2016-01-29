@@ -19,7 +19,6 @@ function c23160024.initial_effect(c)
 	c:RegisterEffect(e3)
 	--draw
 	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_DRAW)
 	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e4:SetRange(LOCATION_FZONE)
 	e4:SetCode(EVENT_RELEASE)
@@ -39,7 +38,7 @@ function c23160024.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c23160024.cfilter(c,tp)
-	return c:IsSetCard(0xe0) and c:IsReason(REASON_RELEASE) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
+	return c:IsPreviousSetCard(0xe0) and c:IsReason(REASON_RELEASE) and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
 end
 function c23160024.drcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c23160024.cfilter,1,nil,tp)
@@ -58,13 +57,13 @@ function c23160024.spfilter(c,e,tp,mg)
 end
 function c23160024.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local mg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND+LOCATION_MZONE,0,nil,TYPE_PENDULUM)
+		local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsType,nil,TYPE_PENDULUM)
 		return Duel.IsExistingMatchingCard(c23160024.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp,mg)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
 end
 function c23160024.spop(e,tp,eg,ep,ev,re,r,rp)
-	local mg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND+LOCATION_MZONE,0,nil,TYPE_PENDULUM)
+	local mg=Duel.GetRitualMaterial(tp):Filter(Card.IsType,nil,TYPE_PENDULUM)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c23160024.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp,mg)
 	local tc=g:GetFirst()
