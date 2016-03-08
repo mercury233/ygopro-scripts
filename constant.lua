@@ -1,6 +1,6 @@
 --Card id
 MIN_ID	=1000		--4 digit, by DataManager::GetDesc()
-MAX_ID	=999999999	--9 digit, by field::select_chain()
+MAX_ID	=268435455	--9 digit, by DataManager::GetDesc()
 --Locations 区域
 LOCATION_DECK		=0x01		--卡组
 LOCATION_HAND		=0x02		--手牌
@@ -133,7 +133,7 @@ STATUS_TO_DISABLE			=0x0004		--将变成无效
 STATUS_PROC_COMPLETE		=0x0008		--完成正规召唤（解除苏生限制）
 STATUS_SET_TURN				=0x0010		--覆盖
 STATUS_NO_LEVEL				=0x0020		--无等级
-STATUS_SET_AVAILABLE		=0x0040		--(N/A)
+STATUS_BATTLE_RESULT		=0x0040		--傷害計算結果預計要破壞的怪獸
 STATUS_SPSUMMON_STEP		=0x0080		--效果特召處理中
 STATUS_FORM_CHANGED			=0x0100		--改变过表示形式
 STATUS_SUMMONING			=0x0200		--召唤中
@@ -307,16 +307,16 @@ EFFECT_SET_PROC					=36		--放置（通常召唤）规则
 EFFECT_LIMIT_SET_PROC			=37		--放置（通常召唤）规则限制
 EFFECT_DEVINE_LIGHT				=38		--神圣光辉（魔术礼帽）
 EFFECT_CANNOT_DISABLE_FLIP_SUMMON	=39	--翻转召唤不会无效
-EFFECT_INDESTRUCTABLE			=40		--不能被破坏（宫廷的规矩）
+EFFECT_INDESTRUCTABLE			=40		--N/A
 EFFECT_INDESTRUCTABLE_EFFECT	=41		--不会被效果破坏
 EFFECT_INDESTRUCTABLE_BATTLE	=42		--不会被战斗破坏
 EFFECT_UNRELEASABLE_SUM			=43		--不能做上级召唤的祭品
 EFFECT_UNRELEASABLE_NONSUM		=44		--不能做上级召唤以外的祭品
-EFFECT_DESTROY_SUBSTITUTE		=45		--代替破坏（别人破坏时牺牲自己
+EFFECT_DESTROY_SUBSTITUTE		=45		--必選的代替破壞(此卡被破壞時用其他卡代替)
 EFFECT_CANNOT_RELEASE			=46		--不能进行解放行为
 EFFECT_INDESTRUCTABLE_COUNT		=47 	--一回合几次不会被破坏
 EFFECT_UNRELEASABLE_EFFECT		=48		--不能被解放
-EFFECT_DESTROY_REPLACE			=50		--代替破坏（自己破坏时牺牲别人
+EFFECT_DESTROY_REPLACE			=50		--可選的代替破壞(將破壞改成其他動作)
 EFFECT_RELEASE_REPLACE			=51		--代替解放
 EFFECT_SEND_REPLACE				=52		--可以不送去XX而送去OO（甜点城堡等）
 EFFECT_CANNOT_DISCARD_HAND		=55		--不能丢弃手牌
