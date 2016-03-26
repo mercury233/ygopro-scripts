@@ -32,11 +32,11 @@ function c58600555.initial_effect(c)
 	e3:SetCountLimit(1)
 	e3:SetCode(EVENT_CHANGE_POS)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCondition(c58600555.condition)
 	e3:SetTarget(c58600555.target)
 	e3:SetOperation(c58600555.operation)
 	c:RegisterEffect(e3)
 end
-c58600555.xyz_count=2
 function c58600555.ovfilter(c,tp,xyzc)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ) and (c:GetRank()==3 or c:GetRank()==4) and c:IsRace(RACE_INSECT) and c:IsCanBeXyzMaterial(xyzc)
 		and c:CheckRemoveOverlayCard(tp,2,REASON_COST)
@@ -139,6 +139,14 @@ function c58600555.tdop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) then
 		Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
 	end
+end
+function c58600555.cfilter(c)
+	local np=c:GetPosition()
+	local pp=c:GetPreviousPosition()
+	return ((np<3 and pp>3) or (pp<3 and np>3))
+end
+function c58600555.condition(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(c58600555.cfilter,1,nil)
 end
 function c58600555.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsRace,tp,LOCATION_GRAVE,0,1,nil,RACE_INSECT) end
