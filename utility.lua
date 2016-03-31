@@ -34,18 +34,6 @@ function Auxiliary.NOT(f)
 				return not f(a,b,c)
 			end
 end
-function Auxiliary.IsDualState(effect)
-	local c=effect:GetHandler()
-	return not c:IsDisabled() and c:IsDualState()
-end
-function Auxiliary.IsNotDualState(effect)
-	local c=effect:GetHandle()
-	return c:IsDisabled() or not c:IsDualState()
-end
-function Auxiliary.DualNormalCondition(effect)
-	local c=effect:GetHandler()
-	return c:IsFaceup() and not c:IsDualState()
-end
 function Auxiliary.BeginPuzzle(effect)
 	local e1=Effect.GlobalEffect()
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -69,6 +57,18 @@ end
 function Auxiliary.PuzzleOp(e,tp)
 	Duel.SetLP(0,0)
 end
+function Auxiliary.IsDualState(effect)
+	local c=effect:GetHandler()
+	return not c:IsDisabled() and c:IsDualState()
+end
+function Auxiliary.IsNotDualState(effect)
+	local c=effect:GetHandle()
+	return c:IsDisabled() or not c:IsDualState()
+end
+function Auxiliary.DualNormalCondition(effect)
+	local c=effect:GetHandler()
+	return c:IsFaceup() and not c:IsDualState()
+end
 function Auxiliary.EnableDualAttribute(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -86,6 +86,55 @@ function Auxiliary.EnableDualAttribute(c)
 	e3:SetCode(EFFECT_REMOVE_TYPE)
 	e3:SetValue(TYPE_EFFECT)
 	c:RegisterEffect(e3)
+end
+--register effect of return to hand for Spirit monsters
+function Auxiliary.EnableSpiritReturn(c,event1,...)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(event1)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e1:SetOperation(Auxiliary.SpiritReturnReg)
+	c:RegisterEffect(e1)
+	for i,event in ipairs{...} do
+		local e2=e1:Clone()
+		e2:SetCode(event)
+		c:RegisterEffect(e2)
+	end
+end
+function Auxiliary.SpiritReturnReg(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e1:SetDescription(1104)
+	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetCode(EVENT_PHASE+PHASE_END)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1)
+	e1:SetReset(RESET_EVENT+0x1ee0000+RESET_PHASE+PHASE_END)
+	e1:SetCondition(Auxiliary.SpiritReturnCondition)
+	e1:SetTarget(Auxiliary.SpiritReturnTarget)
+	e1:SetOperation(Auxiliary.SpiritReturnOperation)
+	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	c:RegisterEffect(e2)
+end
+function Auxiliary.SpiritReturnCondition(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsHasEffect(EFFECT_SPIRIT_DONOT_RETURN) then return false end
+	if e:IsHasType(EFFECT_TYPE_TRIGGER_F) then
+		return not c:IsHasEffect(EFFECT_SPIRIT_MAYNOT_RETURN)
+	else return c:IsHasEffect(EFFECT_SPIRIT_MAYNOT_RETURN) end
+end
+function Auxiliary.SpiritReturnTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
+end
+function Auxiliary.SpiritReturnOperation(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and c:IsFaceup() then
+		Duel.SendtoHand(c,nil,REASON_EFFECT)
+	end
 end
 function Auxiliary.TargetEqualFunction(f,value,a,b,c)
 	return	function(effect,target)
@@ -1629,7 +1678,7 @@ function Auxiliary.damcon1(e,tp,eg,ep,ev,re,r,rp)
 	ex,cg,ct,cp,cv=Duel.GetOperationInfo(ev,CATEGORY_RECOVER)
 	return ex and (cp==tp or cp==PLAYER_ALL) and rr and not Duel.IsPlayerAffectedByEffect(tp,EFFECT_NO_EFFECT_DAMAGE)
 end
---filter for the immune effetc of qli monsters
+--filter for the immune effect of qli monsters
 function Auxiliary.qlifilter(e,te)
 	if te:IsActiveType(TYPE_MONSTER) and te:IsActivated() then
 		local lv=e:GetHandler():GetLevel()
