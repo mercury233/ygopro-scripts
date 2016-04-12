@@ -6,7 +6,7 @@ function c74839123.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCost(c74839123.cost)
 	c:RegisterEffect(e1)
-	--add set
+	--add setcode
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetRange(LOCATION_SZONE)
@@ -17,6 +17,7 @@ function c74839123.initial_effect(c)
 	c:RegisterEffect(e2)
 	--return
 	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
@@ -39,7 +40,7 @@ function c74839123.filter(c)
 	return c:IsSetCard(0xad) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
 end
 function c74839123.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c74839123.filter(chkc,e,tp) end
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c74839123.filter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c74839123.filter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,c74839123.filter,tp,LOCATION_GRAVE,0,1,1,nil)
