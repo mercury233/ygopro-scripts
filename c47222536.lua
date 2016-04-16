@@ -28,7 +28,7 @@ function c47222536.initial_effect(c)
 end
 c47222536.dark_magician_list=true
 function c47222536.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>2 end
 end
 function c47222536.filter(c)
 	return (c.dark_magician_list or c:IsCode(46986414)) and c:IsAbleToHand()
@@ -49,7 +49,7 @@ function c47222536.activate(e,tp,eg,ep,ev,re,r,rp)
 	else Duel.SortDecktop(tp,tp,3) end
 end
 function c47222536.cfilter(c,tp)
-	return c:IsCode(46986414) and c:IsControler(tp)
+	return c:IsFaceup() and c:IsCode(46986414) and c:IsControler(tp)
 end
 function c47222536.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c47222536.cfilter,1,nil,tp)

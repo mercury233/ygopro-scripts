@@ -168,8 +168,8 @@ ASSUME_RACE			=6
 ASSUME_ATTACK		=7
 ASSUME_DEFENCE		=8
 --Counter	--指示物
-COUNTER_NEED_PERMIT			=0x1000	--可以放置某指示物
-COUNTER_NEED_ENABLE			=0x2000	--放在自己身上的指示物(卡片守衛)
+COUNTER_WITHOUT_PERMIT		=0x1000	--可以放置在非特定對象的指示物
+COUNTER_NEED_ENABLE			=0x2000	--在卡片本身放置上述指示物的標記(卡片守衛)
 --Phase	--阶段
 PHASE_DRAW			=0x01	--抽卡阶段
 PHASE_STANDBY		=0x02	--准备阶段
@@ -216,10 +216,10 @@ RESET_TEMP_REMOVE	=0x00100000			--暂时除外重置
 RESET_TOHAND		=0x00200000			--回手牌或加入手牌重置
 RESET_TODECK		=0x00400000			--回卡组重置
 RESET_LEAVE			=0x00800000			--从场上移到其他位置/超量叠放重置
-RESET_TOFIELD		=0x01000000			--到场上重置
+RESET_TOFIELD		=0x01000000			--到场上重置(move_to_field())
 RESET_CONTROL		=0x02000000			--控制者变更重置
 RESET_OVERLAY		=0x04000000			--超量叠放重置
-RESET_MSCHANGE		=0x08000000			--从怪兽区到魔法区，或者从魔法区到怪兽区
+RESET_MSCHANGE		=0x08000000			--从怪兽区到魔法区，或者从魔法区到怪兽区(move_to_field()、寶玉獸)
 --========== Types ==========	--效果类型（定义效果触发类型，和codes一起使用）
 EFFECT_TYPE_SINGLE			=0x0001		--自己状态变化时触发
 EFFECT_TYPE_FIELD			=0x0002		--场上所有卡状态变化时触发
@@ -243,11 +243,11 @@ EFFECT_FLAG_IGNORE_RANGE	=0x0020		--影响所有区域的卡（禁止令 大宇�
 EFFECT_FLAG_ABSOLUTE_TARGET	=0x0040		--Target Range不会因为控制权的改变而改变
 EFFECT_FLAG_IGNORE_IMMUNE	=0x0080		--无视效果免疫
 EFFECT_FLAG_SET_AVAILABLE	=0x0100		--影响场上里侧的卡/裡側狀態可發動
-EFFECT_FLAG_CANNOT_NEGATED	=0x0200		--含有"此效果不會被無效"的敘述
+EFFECT_FLAG_CANNOT_NEGATE	=0x0200		--含有"此效果不會被無效"的敘述
 EFFECT_FLAG_CANNOT_DISABLE	=0x0400		--不会被无效
 EFFECT_FLAG_PLAYER_TARGET	=0x0800		--以玩家为对象
 EFFECT_FLAG_BOTH_SIDE		=0x1000		--双方都能使用（部分场地，弹压）
-EFFECT_FLAG_COPY_INHERIT	=0x2000		--继承复制的效果的Reset属性
+EFFECT_FLAG_COPY_INHERIT	=0x2000		--若由复制的效果產生則继承其Reset属性
 EFFECT_FLAG_DAMAGE_STEP		=0x4000		--可以在伤害步骤发动
 EFFECT_FLAG_DAMAGE_CAL		=0x8000		--可以在伤害计算时发动
 EFFECT_FLAG_DELAY			=0x10000	--場合型誘發效果、用於永續效果的EFFECT_TYPE_CONTINUOUS
