@@ -73,8 +73,14 @@ function c14735698.activate(e,tp,eg,ep,ev,re,r,rp)
 			end
 			local mat=nil
 			if ft>0 then
-				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-				mat=mg:SelectWithSumEqual(tp,Card.GetRitualLevel,tc:GetLevel(),1,99,tc)
+				if mg:IsExists(Card.IsCode,1,nil,90307777) and mg:GetCount()>1
+					and Duel.SelectYesNo(tp,aux.Stringid(51124303,0)) then
+					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+					mat=mg:FilterSelect(tp,Card.IsCode,1,1,nil,90307777)
+				else
+					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+					mat=mg:SelectWithSumEqual(tp,Card.GetRitualLevel,tc:GetLevel(),1,99,tc)
+				end
 			else
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 				mat=mg:FilterSelect(tp,c14735698.mfilterf,1,1,nil,tp,mg,tc)
