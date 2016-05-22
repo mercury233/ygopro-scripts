@@ -102,11 +102,24 @@ function c58820923.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e3:SetCode(EFFECT_CANNOT_ATTACK)
 		e3:SetCondition(c58820923.atkcon2)
 		c:RegisterEffect(e3)
+		--temp
+		local e4=Effect.CreateEffect(c)
+		e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+		e4:SetCode(EVENT_DAMAGE_STEP_END)
+		e4:SetCondition(c58820923.tmpcon)
+		e4:SetOperation(c58820923.tmpop)
+		c:RegisterEffect(e4)
 	end
 end
 function c58820923.dircon(e)
-	return e:GetHandler():GetAttackAnnouncedCount()>0
+	return e:GetHandler():GetFlagEffect(58820923)>0
 end
 function c58820923.atkcon2(e)
 	return e:GetHandler():IsDirectAttacked()
+end
+function c58820923.tmpcon(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler()==Duel.GetAttacker() and e:GetHandler():IsRelateToBattle()
+end
+function c58820923.tmpop(e,tp,eg,ep,ev,re,r,rp)
+	e:GetHandler():RegisterFlagEffect(58820923,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 end
