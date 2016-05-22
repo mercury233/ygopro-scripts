@@ -108,6 +108,7 @@ function c58820923.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e4:SetCode(EVENT_DAMAGE_STEP_END)
 		e4:SetCondition(c58820923.tmpcon)
 		e4:SetOperation(c58820923.tmpop)
+		e4:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e4)
 	end
 end
