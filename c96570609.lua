@@ -60,7 +60,7 @@ function c96570609.tgfilter(c)
 	return c:IsSetCard(0xbe) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToGrave()
 end
 function c96570609.spfilter(c,e,tp)
-	return c:IsAttackAbove(2400) and c:GetDefence()==1000 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsAttackAbove(2400) and c:GetDefense()==1000 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c96570609.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -125,14 +125,13 @@ end
 function c96570609.sumop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	local sel=0
-	if c:IsSummonable(true,nil,1) and c:IsMSetable(true,nil,1) then
-		sel=Duel.SelectOption(tp,1151,1153)+1
-	elseif c:IsSummonable(true,nil,1) then
-		sel=Duel.SelectOption(tp,1151)+1
-	elseif c:IsMSetable(true,nil,1) then
-		sel=Duel.SelectOption(tp,1153)+2
+	local pos=0
+	if c:IsSummonable(true,nil,1) then pos=pos+POS_FACEUP_ATTACK end
+	if c:IsMSetable(true,nil,1) then pos=pos+POS_FACEDOWN_DEFENSE end
+	if pos==0 then return end
+	if Duel.SelectPosition(tp,c,pos)==POS_FACEUP_ATTACK then
+		Duel.Summon(tp,c,true,nil,1)
+	else
+		Duel.MSet(tp,c,true,nil,1)
 	end
-	if sel==1 then Duel.Summon(tp,c,true,nil,1) end
-	if sel==2 then Duel.MSet(tp,c,true,nil,1) end
 end

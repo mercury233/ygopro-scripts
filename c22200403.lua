@@ -11,7 +11,7 @@ function c22200403.initial_effect(c)
 	e1:SetLabel(1)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
-	e2:SetCode(EFFECT_UPDATE_DEFENCE)
+	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e2)
 	--destroy
 	local e3=Effect.CreateEffect(c)
@@ -86,10 +86,6 @@ function c22200403.desop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToBattle() then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end
-end
-function c22200403.atcon(e)
-	return c22200403.effcon(e)
-		and Duel.IsExistingMatchingCard(Card.IsAttackable,e:GetHandlerPlayer(),0,LOCATION_MZONE,1,nil)
 end
 function c22200403.drcon1(e,tp,eg,ep,ev,re,r,rp)
 	return c22200403.effcon(e)

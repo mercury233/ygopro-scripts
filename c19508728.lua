@@ -60,7 +60,7 @@ function c19508728.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=ec:GetBattleTarget()
 	if ec and tc and ec:IsFaceup() and tc:IsFaceup() then
 		local atk=tc:GetAttack()
-		local def=tc:GetDefence()
+		local def=tc:GetDefense()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
@@ -72,7 +72,7 @@ function c19508728.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DAMAGE_CAL)
 		ec:RegisterEffect(e1)
 		local e2=e1:Clone()
-		e2:SetCode(EFFECT_SET_DEFENCE_FINAL)
+		e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
 		ec:RegisterEffect(e2)
 	end
 end

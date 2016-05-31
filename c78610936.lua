@@ -20,7 +20,9 @@ function c78610936.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,c78610936.filter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
-	Duel.SetChainLimit(aux.FALSE)
+	if e:IsHasType(EFFECT_TYPE_ACTIVATE) then
+		Duel.SetChainLimit(aux.FALSE)
+	end
 end
 function c78610936.spfilter(c,e,tp)
 	return c:IsLocation(LOCATION_GRAVE) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp) and not c:IsHasEffect(EFFECT_NECRO_VALLEY)
@@ -41,7 +43,7 @@ function c78610936.activate(e,tp,eg,ep,ev,re,r,rp)
 			end
 			local tc=g:GetFirst()
 			while tc do
-				Duel.SpecialSummonStep(tc,0,tp,1-tp,false,false,POS_FACEUP_DEFENCE)
+				Duel.SpecialSummonStep(tc,0,tp,1-tp,false,false,POS_FACEUP_DEFENSE)
 				if tc:GetLevel()>0 then
 					local e1=Effect.CreateEffect(e:GetHandler())
 					e1:SetType(EFFECT_TYPE_SINGLE)
