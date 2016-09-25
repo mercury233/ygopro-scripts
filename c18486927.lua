@@ -1,5 +1,4 @@
 --古代の歯車機械
---Name change is temporary, needs a proper announce function
 function c18486927.initial_effect(c)
 	--declare card
 	local e1=Effect.CreateEffect(c)
@@ -12,7 +11,7 @@ function c18486927.initial_effect(c)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e2)
-	--name change (temp)
+	--name change
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(18486927,0))
 	e3:SetType(EFFECT_TYPE_IGNITION)
@@ -62,15 +61,12 @@ function c18486927.actcon(e)
 end
 function c18486927.nametg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	--Gadget Order: Green, Red, Yellow, Gold, Silver, Soldier, Hauler, Arms, Driver
-	local nt={aux.Stringid(18486927,1),aux.Stringid(18486927,2),aux.Stringid(18486927,3),aux.Stringid(18486927,4),aux.Stringid(18486927,5),
-		aux.Stringid(18486927,6),aux.Stringid(18486927,7),aux.Stringid(18486927,8),aux.Stringid(18486927,9)}
-	local ct={41172955,86445415,13839120,55010259,29021114,86281779,28002611,47985614,54497620}
-	Duel.Hint(HINT_SELECTMSG,tp,564)
-	local opt=Duel.SelectOption(tp,nt[1],nt[2],nt[3],nt[4],nt[5],nt[6],nt[7],nt[8],nt[9])+1
-	local ac=ct[opt]
+	local code=e:GetHandler():GetCode()
+	--c:IsSetCard(0x51) and not c:IsCode(code)
+	c18486927.announce_filter={0x51,OPCODE_ISSETCARD,code,OPCODE_ISCODE,OPCODE_NOT,OPCODE_AND}
+	local ac=Duel.AnnounceCardFilter(tp,table.unpack(c18486927.announce_filter))
 	Duel.SetTargetParam(ac)
-	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
+	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD_FILTER)
 end
 function c18486927.nameop(e,tp,eg,ep,ev,re,r,rp)
 	local ac=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
