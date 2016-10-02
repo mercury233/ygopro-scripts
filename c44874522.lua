@@ -9,6 +9,7 @@ function c44874522.initial_effect(c)
 	--summon success
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
 	e2:SetCondition(c44874522.regcon)
 	e2:SetOperation(c44874522.regop)
@@ -75,7 +76,7 @@ function c44874522.actcon(e)
 	return Duel.GetAttacker()==e:GetHandler()
 end
 function c44874522.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetAttacker()==e:GetHandler() and e:GetHandler():IsRelateToBattle()
+	return Duel.GetAttacker()==e:GetHandler()
 end
 function c44874522.desfilter(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP)
