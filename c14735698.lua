@@ -53,6 +53,9 @@ function c14735698.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
 end
+function c14735698.tmpfilter(c)
+	return c:IsCode(90307777) and not c:IsDisabled()
+end
 function c14735698.activate(e,tp,eg,ep,ev,re,r,rp)
 	local mg1=Duel.GetRitualMaterial(tp)
 	local mg2=Duel.GetMatchingGroup(c14735698.mfilter,tp,LOCATION_GRAVE,0,nil)
@@ -73,10 +76,10 @@ function c14735698.activate(e,tp,eg,ep,ev,re,r,rp)
 			end
 			local mat=nil
 			if ft>0 then
-				if mg:IsExists(Card.IsCode,1,nil,90307777) and mg:GetCount()>1
+				if mg:IsExists(c14735698.tmpfilter,1,nil) and mg:GetCount()>1
 					and Duel.SelectYesNo(tp,aux.Stringid(51124303,0)) then
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-					mat=mg:FilterSelect(tp,Card.IsCode,1,1,nil,90307777)
+					mat=mg:FilterSelect(tp,c14735698.tmpfilter,1,1,nil)
 				else
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 					mat=mg:SelectWithSumEqual(tp,Card.GetRitualLevel,tc:GetLevel(),1,99,tc)
