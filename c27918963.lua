@@ -62,7 +62,7 @@ function c27918963.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		e:SetCategory(CATEGORY_ATKCHANGE)
 		e:GetHandler():RemoveCounter(tp,0x33,1,REASON_COST)
 	else
-		e:SetCategory(CATEGORY_TOHAND)
+		e:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 		e:GetHandler():RemoveCounter(tp,0x33,3,REASON_COST)
 		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 	end
@@ -84,12 +84,8 @@ function c27918963.operation(e,tp,eg,ep,ev,re,r,rp)
 		end
 	else
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local g=Duel.SelectMatchingCard(tp,c27918963.filter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c27918963.filter2),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 		if g:GetCount()>0 then
-			if g:GetFirst():IsHasEffect(EFFECT_NECRO_VALLEY) and Duel.IsChainDisablable(0) then
-				Duel.NegateEffect(0)
-				return
-			end
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)
 		end

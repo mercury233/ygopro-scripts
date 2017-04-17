@@ -21,6 +21,7 @@ function c88935103.initial_effect(c)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e4:SetValue(LOCATION_DECKBOT)
 	e4:SetCondition(c88935103.rdcon)
 	c:RegisterEffect(e4)
@@ -88,8 +89,5 @@ function c88935103.spop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetValue(-3)
 	tc:RegisterEffect(e1)
 	if not c:IsRelateToEffect(e) then return end
-	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsLocation(LOCATION_HAND) then
-		Duel.SendtoGrave(c,REASON_RULE)
-	end
+	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end

@@ -3,6 +3,7 @@ function c20579538.initial_effect(c)
 	--deck check
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(20579538,0))
+	e1:SetCategory(CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,20579538)
@@ -39,13 +40,12 @@ function c20579538.operation(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetDecktopGroup(tp,1)
 	Duel.DisableShuffleCheck()
 	if Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)==0 then return end
-	local dg=Duel.GetMatchingGroup(c20579538.tdfilter,tp,LOCATION_GRAVE,0,nil)
+	local dg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c20579538.tdfilter),tp,LOCATION_GRAVE,0,nil)
 	if dg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(20579538,2)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 		local tg=dg:Select(tp,1,1,nil)
 		Duel.HintSelection(tg)
-		if tg:GetFirst():IsHasEffect(EFFECT_NECRO_VALLEY) then return end
 		Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
 	end
 end
