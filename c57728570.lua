@@ -19,16 +19,22 @@ function c57728570.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.SelectReleaseGroup(tp,c57728570.costfilter,1,1,nil)
 	Duel.Release(g,REASON_COST)
 end
+function c57728570.filter(c)
+	return c:IsAttackAbove(1500)
+end
+function c57728570.hgfilter(c)
+	return not c:IsPublic() or c57728570.filter(c)
+end
+function c57728570.fgfilter(c)
+	return c:IsFacedown() or c57728570.filter(c)
+end
 function c57728570.tgfilter(c)
-	return c:IsFaceup() and c:IsAttackAbove(1500) and c:IsDestructable()
+	return ((c:IsLocation(LOCATION_HAND) and c:IsPublic()) or (c:IsLocation(LOCATION_MZONE) and c:IsFaceup())) and c57728570.filter(c)
 end
 function c57728570.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(c57728570.tgfilter,tp,0,LOCATION_MZONE,nil)
+	local g=Duel.GetMatchingGroup(c57728570.tgfilter,tp,0,LOCATION_MZONE+LOCATION_HAND,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
-end
-function c57728570.filter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAttackAbove(1500)
 end
 function c57728570.activate(e,tp,eg,ep,ev,re,r,rp)
 	local conf=Duel.GetFieldGroup(tp,0,LOCATION_MZONE+LOCATION_HAND)
@@ -55,7 +61,6 @@ function c57728570.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e2,tp)
 	e2:SetLabelObject(e1)
 	e:GetHandler():RegisterFlagEffect(1082946,RESET_PHASE+PHASE_END+RESET_OPPO_TURN,0,3)
-	c57728570[e:GetHandler()]=e2
 end
 function c57728570.desop(e,tp,eg,ep,ev,re,r,rp)
 	if ep==e:GetOwnerPlayer() then return end

@@ -2,47 +2,65 @@
 function c82301904.initial_effect(c)
 	c:EnableReviveLimit()
 	--special summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(82301904,0))
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_HAND)
-	e1:SetCondition(c82301904.spcon)
-	e1:SetOperation(c82301904.spop)
-	c:RegisterEffect(e1)
-	--to grave
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(82301904,1))
-	e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DAMAGE)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCost(c82301904.sgcost)
-	e2:SetTarget(c82301904.sgtg)
-	e2:SetOperation(c82301904.sgop)
+	e2:SetDescription(aux.Stringid(82301904,0))
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_SPSUMMON_PROC)
+	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetRange(LOCATION_HAND)
+	e2:SetCondition(c82301904.spcon)
+	e2:SetOperation(c82301904.spop)
 	c:RegisterEffect(e2)
+	--to grave
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(82301904,1))
+	e3:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DAMAGE)
+	e3:SetType(EFFECT_TYPE_IGNITION)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCost(c82301904.sgcost)
+	e3:SetTarget(c82301904.sgtg)
+	e3:SetOperation(c82301904.sgop)
+	c:RegisterEffect(e3)
 end
-function c82301904.spfilter(c,att)
-	return c:IsAttribute(att) and c:IsAbleToRemoveAsCost()
+function c82301904.spcostfilter(c)
+	return c:IsAbleToRemoveAsCost() and c:IsAttribute(ATTRIBUTE_LIGHT+ATTRIBUTE_DARK)
+end
+function c82301904.spcost_selector(c,tp,g,sg,i)
+	sg:AddCard(c)
+	g:RemoveCard(c)
+	local flag=false
+	if i<2 then
+		flag=g:IsExists(c82301904.spcost_selector,1,nil,tp,g,sg,i+1)
+	else
+		flag=sg:FilterCount(Card.IsAttribute,nil,ATTRIBUTE_LIGHT)>0
+			and sg:FilterCount(Card.IsAttribute,nil,ATTRIBUTE_DARK)>0
+	end
+	sg:RemoveCard(c)
+	g:AddCard(c)
+	return flag
 end
 function c82301904.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c82301904.spfilter,tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_LIGHT)
-		and Duel.IsExistingMatchingCard(c82301904.spfilter,tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_DARK)
+	if Duel.GetMZoneCount(tp)<=0 then return false end
+	local g=Duel.GetMatchingGroup(c82301904.spcostfilter,tp,LOCATION_GRAVE,0,nil)
+	local sg=Group.CreateGroup()
+	return g:IsExists(c82301904.spcost_selector,1,nil,tp,g,sg,1)
 end
 function c82301904.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g1=Duel.SelectMatchingCard(tp,c82301904.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,ATTRIBUTE_LIGHT)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g2=Duel.SelectMatchingCard(tp,c82301904.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,ATTRIBUTE_DARK)
-	g1:Merge(g2)
-	Duel.Remove(g1,POS_FACEUP,REASON_COST)
+	local g=Duel.GetMatchingGroup(c82301904.spcostfilter,tp,LOCATION_GRAVE,0,nil)
+	local sg=Group.CreateGroup()
+	for i=1,2 do
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+		local g1=g:FilterSelect(tp,c82301904.spcost_selector,1,1,nil,tp,g,sg,i)
+		sg:Merge(g1)
+		g:Sub(g1)
+	end
+	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 function c82301904.sgcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,1000)
-	else Duel.PayLPCost(tp,1000) end
+	if chk==0 then return Duel.CheckLPCost(tp,1000) end
+	Duel.PayLPCost(tp,1000)
 end
 function c82301904.sgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

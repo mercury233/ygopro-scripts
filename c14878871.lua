@@ -27,6 +27,7 @@ end
 function c14878871.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsPlayerAffectedByEffect(tp,59822133) then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<2 then return end
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(c14878871.filter,tp,LOCATION_DECK,0,nil,e,tp)
 	if g:GetCount()>=2 then
 		local fid=e:GetHandler():GetFieldID()
@@ -34,11 +35,11 @@ function c14878871.spop(e,tp,eg,ep,ev,re,r,rp)
 		local sg=g:Select(tp,2,2,nil)
 		Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 		local tc=sg:GetFirst()
-		tc:RegisterFlagEffect(14878871,RESET_EVENT+0x1fe0000,0,1,fid)
+		tc:RegisterFlagEffect(14878871,RESET_EVENT+RESETS_STANDARD,0,1,fid)
 		tc=sg:GetNext()
-		tc:RegisterFlagEffect(14878871,RESET_EVENT+0x1fe0000,0,1,fid)
+		tc:RegisterFlagEffect(14878871,RESET_EVENT+RESETS_STANDARD,0,1,fid)
 		sg:KeepAlive()
-		local e1=Effect.CreateEffect(e:GetHandler())
+		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_PHASE+PHASE_END)
 		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)

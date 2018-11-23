@@ -27,7 +27,7 @@ function c77565204.filter1(c,e)
 	return c:IsCanBeFusionMaterial() and c:IsAbleToGrave() and not c:IsImmuneToEffect(e)
 end
 function c77565204.filter2(c,m)
-	return c:IsType(TYPE_FUSION) and c:CheckFusionMaterial(m) and not c:IsForbidden()
+	return c:IsFusionSummonableCard() and c:CheckFusionMaterial(m)
 end
 function c77565204.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -65,7 +65,6 @@ function c77565204.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCondition(c77565204.proccon)
 		e1:SetOperation(c77565204.procop)
 		e1:SetLabel(code)
-		e1:SetLabelObject(e)
 		c:RegisterEffect(e1)
 	end
 end
@@ -80,18 +79,14 @@ function c77565204.procop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=c:GetTurnCounter()
 	ct=ct+1
 	c:SetTurnCounter(ct)
-	if ct==2 then
+	if ct==2 and Duel.GetLocationCountFromEx(tp)>0
+		and aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL) then
 		local code=e:GetLabel()
 		local tc=Duel.GetFirstMatchingCard(c77565204.procfilter,tp,LOCATION_EXTRA,0,nil,code,e,tp)
 		if not tc then return end
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
-			Duel.SendtoGrave(tc,REASON_EFFECT)
-			tc:CompleteProcedure()
-		else
 			Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 			tc:CompleteProcedure()
 			c:SetCardTarget(tc)
-		end
 	end
 end
 function c77565204.desop(e,tp,eg,ep,ev,re,r,rp)

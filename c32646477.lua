@@ -15,12 +15,9 @@ function c32646477.initial_effect(c)
 	e1:SetOperation(c32646477.operation)
 	c:RegisterEffect(e1)
 end
-function c32646477.costfilter(c)
-	return c:GetLevel()>0
-end
 function c32646477.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckReleaseGroup(tp,c32646477.costfilter,1,nil) end
-	local g=Duel.SelectReleaseGroup(tp,c32646477.costfilter,1,1,nil)
+	if chk==0 then return Duel.CheckReleaseGroup(tp,Card.IsLevelAbove,1,nil,1) end
+	local g=Duel.SelectReleaseGroup(tp,Card.IsLevelAbove,1,1,nil,1)
 	e:SetLabel(g:GetFirst():GetLevel()*200)
 	Duel.Release(g,REASON_COST)
 end

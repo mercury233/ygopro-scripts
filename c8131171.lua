@@ -2,11 +2,11 @@
 function c8131171.initial_effect(c)
 	--to hand
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(8131171,0))
 	e1:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
 	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetCode(EVENT_PHASE+PHASE_STANDBY)
 	e1:SetRange(LOCATION_GRAVE)
-	e1:SetDescription(aux.Stringid(8131171,0))
 	e1:SetCondition(c8131171.condition)
 	e1:SetTarget(c8131171.target)
 	e1:SetOperation(c8131171.operation)
