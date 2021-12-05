@@ -38,7 +38,6 @@ function c77565204.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c77565204.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not c:IsRelateToEffect(e) then return end
 	local mg=Duel.GetMatchingGroup(c77565204.filter1,tp,LOCATION_DECK,0,nil,e)
 	local sg=Duel.GetMatchingGroup(c77565204.filter2,tp,LOCATION_EXTRA,0,nil,mg)
 	if sg:GetCount()>0 then
@@ -70,6 +69,7 @@ function c77565204.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function c77565204.procfilter(c,code,e,tp)
 	return c:IsCode(code) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
+		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c77565204.proccon(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer()
@@ -79,8 +79,7 @@ function c77565204.procop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=c:GetTurnCounter()
 	ct=ct+1
 	c:SetTurnCounter(ct)
-	if ct==2 and Duel.GetLocationCountFromEx(tp)>0
-		and aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL) then
+	if ct==2 and aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL) then
 		local code=e:GetLabel()
 		local tc=Duel.GetFirstMatchingCard(c77565204.procfilter,tp,LOCATION_EXTRA,0,nil,code,e,tp)
 		if not tc then return end
