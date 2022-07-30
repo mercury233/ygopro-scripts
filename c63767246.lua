@@ -91,23 +91,30 @@ function c63767246.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingTarget(c63767246.atkfilter2,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,c63767246.atkfilter2,tp,LOCATION_MZONE,0,1,1,nil)
+	local g=e:GetLabelObject():Clone()
+	g:KeepAlive()
+	e:GetLabelObject():DeleteGroup()
+	local cid=Duel.GetChainInfo(ev,CHAININFO_CHAIN_ID)
+	c63767246[cid]=g
 end
 function c63767246.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	local g=e:GetLabelObject()
+	local cid=Duel.GetChainInfo(ev,CHAININFO_CHAIN_ID)
+	local g=c63767246[cid]
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+		local ec=g:GetFirst()
 		if g:GetCount()>=2 then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-			g=g:Select(tp,1,1,nil)
+			ec=g:Select(tp,1,1,nil):GetFirst()
 		end
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(g:GetFirst():GetBaseAttack())
+		e1:SetValue(ec:GetBaseAttack())
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e1)
 	end
-	e:GetLabelObject():DeleteGroup()
+	g:DeleteGroup()
 end
